@@ -5,32 +5,25 @@ info:
   version: 1.0.0
   description: REST API for Smart Campus alerts
 
+  contact:
+    name: FIT4110 Teaching Team
+    email: fit4110@example.edu.vn
+
 servers:
   - url: http://localhost:4010
+    description: Prism mock server
 
-paths:
+tags:
+  - name: health
+    description: Kiểm tra trạng thái service
+  - name: alerts
+    description: Quản lý cảnh báo Smart Campus
+  - name: events
+    description: Quản lý sự kiện nghiệp vụ
 
-  /health:
-    get:
-      summary: Health check
-      operationId: healthCheck
-
-      responses:
-        '200':
-          description: Service healthy
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthResponse'
-
-  /alerts/recent:
-    get:
-      summary: Get recent alerts
-      operationId: getRecentAlerts
-
-      security:
-        - bearerAuth: []
-
+security:
+  - bearerAuth: []
+      
       responses:
         '200':
           description: Recent alerts
