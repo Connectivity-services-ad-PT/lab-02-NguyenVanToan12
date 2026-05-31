@@ -22,7 +22,9 @@ $payload = '{
   "message": "Phat hien truy cap trai phep tai cong chinh",
   "relatedEventId": "0196fb3d-4ad7-7d1e-9f49-5d5148d2babc"
 }'
-curl.exe -i -X POST "$BaseUrl/alerts" -H $AuthHeader -H "Content-Type: application/json" -d $payload
+$payload | Out-File -Encoding Ascii temp_payload.json
+curl.exe -i -X POST "$BaseUrl/alerts" -H $AuthHeader -H "Content-Type: application/json" -d "@temp_payload.json"
+if (Test-Path temp_payload.json) { Remove-Item temp_payload.json }
 Write-Host "`n---"
 
 Write-Host "[4/5] Error case: GET /alerts/recent without token"
@@ -30,5 +32,8 @@ curl.exe -i "$BaseUrl/alerts/recent"
 Write-Host "`n---"
 
 Write-Host "[5/5] Error case: POST /alerts invalid payload"
-curl.exe -i -X POST "$BaseUrl/alerts" -H $AuthHeader -H "Content-Type: application/json" -d '{ "alertType": 12345 }'
+$invalidPayload = '{ "alertType": 12345 }'
+$invalidPayload | Out-File -Encoding Ascii temp_invalid.json
+curl.exe -i -X POST "$BaseUrl/alerts" -H $AuthHeader -H "Content-Type: application/json" -d "@temp_invalid.json"
+if (Test-Path temp_invalid.json) { Remove-Item temp_invalid.json }
 Write-Host ""
